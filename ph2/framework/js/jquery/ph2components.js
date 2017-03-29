@@ -7,7 +7,7 @@ Contact: samuel.laeubli@uzh.ch
 ===
 This is the javascript framework providing the PH2Component functionality. All Components are bound to the Namespace PH2Component.
 ===
-Usage: 
+Usage:
 $(document).ready( function() {
 		var matchingOccurrences = PH2Component.OccContextBox('the_html_object_id');
 });
@@ -31,7 +31,7 @@ function escapeNull(string) {
 }
 
 var PH2Component = {
-	
+
 	//Internal Object (pseudo-private)
 	_Tabber : function(ModuleboxRef) {
 	/* Adds tabbing functionality to all HTMLObjects of class .modulebox
@@ -42,16 +42,16 @@ var PH2Component = {
 		var _title = _container.children('.title');
 		var _std_title_text = _title.html();
 		var _all_tabs = _container.find('.tab');
-		
+
 		// hide all tabs, except for except_id
 		var _hideAllTabs = function (except_id) {
 			_all_tabs.each( function() {
-				if ($(this).attr('id') != except_id) { 
+				if ($(this).attr('id') != except_id) {
 					$(this).slideUp();
 				}
 			});
 		}
-		
+
 		// bind tabs to buttons (extended title)
 		_container.find('a.tablink').each( function() {
 			$(this).bind('click', function() {
@@ -71,14 +71,14 @@ var PH2Component = {
 			});
 		});
 	},
-	
+
 	//Object
 	// ****************
 	// OccContextBox
 	// ****************
 	OccContextBox : function(HTMLObjectID) {
 	/* Adds functionality to an OccContextBox HTML skeleton. */
-		
+
 		//PRIVATE
 		//Object references
 		var container = $('#' + HTMLObjectID);
@@ -102,7 +102,7 @@ var PH2Component = {
 		var _view_text_url;
 		var _view_text_url_target;
 		var _view_text_rel;
-		
+
 		//Private methods
 		// toggle selected/not selected for a matching occurrence line
 		var toggleOccSelection = function (id) {
@@ -141,7 +141,7 @@ var PH2Component = {
 			}
 			occ_matches.append('<pre class="occ_line' + status + '"><span class="leftContext">' + leftContext + '</span><span id="' + occurrenceID + '" class="match">' + occurrenceSurface + '</span> <span class="rightContext">' + rightContext + '</span> </pre>');
 		}
-		
+
 		// add an occurrence to the resultset with a pending context (to be loaded; status=pending)
 		var addPendingOccurrence = function (occurrence_id) {
 			// add the meta line
@@ -149,19 +149,19 @@ var PH2Component = {
 			// add the occurrence line
 			addOccLine(occurrence_id, '(loading)', _context_placeholder, _context_placeholder, true);
 		}
-		
+
 		// load all occurrence contexts and details
 		var _load_pending_occurrences = function () {
 			occ_matches.find('pre.pending').each( function() {
 				_load_occurrence(this);
 			});
 		}
-		
+
 		// load occurrences in current viewport
 		var _load_pending_visible_occurrences = function() {
 			occ_matches.trigger('scrollstop');
 		}
-		
+
 		// load a pending occurrence
 		var _load_occurrence = function (occ_line) {
 			var current_context_line = $(occ_line);
@@ -202,7 +202,7 @@ var PH2Component = {
 					}
 				});
 		}
-		
+
 		// mark an occurrence as lemmatized
 		var _mark_as_lemmatized = function (occurrence_id, lemma) {
 			// select relevant HTML containers
@@ -213,8 +213,8 @@ var PH2Component = {
 			occurrence_match.addClass('lemmatized');
 			occurrence_match.attr('title', lemma + ' (Lemma)');
 		}
-		
-		
+
+
 		// sorts all displayed Lines according to ajax.php?sortOccurrencesByText
 		var _sort_results = function( field ) {
 			// get all currently displayed OccurrenceIDs
@@ -258,7 +258,7 @@ var PH2Component = {
 			// make sure contexts are loaded for matches that are still pending
 			_load_pending_visible_occurrences();
 		}
-		
+
 		// takes an ID of an Occurrence stored in the database and shows it among its content
 		var _add = function (occurrence_id) {
 			_displayed_occurrences.push(occurrence_id+''); //conversion to string for php/mysql handling
@@ -280,12 +280,12 @@ var PH2Component = {
 				}
 			});*/
 		}
-		
+
 		var centerView = function () {
-			// center horizontal 
+			// center horizontal
 			occ_matches.scrollTo('50%', {axis:'x'});
 		}
-		
+
 		var bindCheckboxToOccSpan = function (id) {
 		// bind checkbox and matching occurrence span on click event
 			// checkbox click-event
@@ -302,7 +302,7 @@ var PH2Component = {
 				toggleOccSelection(id);
 			});
 		}
-		
+
 		var _getSelected = function () {
 			// returns a JSON-list of all currently selected occurrences in the box
 			var result = [];
@@ -311,13 +311,13 @@ var PH2Component = {
 			});
 			return(JSON.stringify(result));
 		}
-		
+
 		var _removeOccurrence = function (occurrence_id) {
 			// remove an occurrence (identified by its ID) from this box
 			$("span.match#" + occurrence_id).parent().fadeOut('200ms', function() {$(this).remove()});
 			$("#checkbox-" + occurrence_id).parent().parent().fadeOut('200ms', function() {$(this).remove()});
 		}
-		
+
 		var _removeSelected = function () {
 			// removes all selected occurrences from this box
 			var selected = _getSelected();
@@ -325,7 +325,7 @@ var PH2Component = {
 				_removeOccurrence(this);
 			});
 		}
-		
+
 		var _handleExportButton = function (selfref, e, action) {
 			var selected_lines = _getSelected();
 			if (selected_lines != '[]') {
@@ -339,7 +339,7 @@ var PH2Component = {
 				e.preventDefault();
 			}
 		}
-		
+
 		var _hide_lemmatized_results = function () {
 			occ_matches.find('pre span.lemmatized').each(function() {
 				$(this).parent().fadeOut();
@@ -348,7 +348,7 @@ var PH2Component = {
 				$(this).fadeOut();
 			});
 		}
-		
+
 		var _show_lemmatized_results = function () {
 			occ_matches.find('pre span.lemmatized').each(function() {
 				$(this).parent().fadeIn();
@@ -357,7 +357,16 @@ var PH2Component = {
 				$(this).fadeIn();
 			});
 		}
-		
+
+		var _hideGroup = function (selected_graph_id) {
+			// removes all selected occurrences from this box
+			$.getJSON('actions/php/ajax.php?action=getOccurrenceIDsByGrapheme&graphID=' + selected_graph_id, function(occurrence_ids) {
+				$.each(occurrence_ids, function(i) {
+					_removeOccurrence(this);
+				});
+			});
+		}
+
 		//Default routine / behaviour
 		// center context window
 		centerView();
@@ -402,7 +411,7 @@ var PH2Component = {
 		// bind the resize event of occ_matches to occ_matches_meta
 		occ_matches.resize( function() {
 			$("#occ_matches_meta").height( occ_matches.height() );
-		});		
+		});
 		// determine the url for displaying whole texts
 		$.get("actions/php/ajax.php?action=isGuest", function(isGuest) {
 			if (isGuest == 'true') {
@@ -415,7 +424,7 @@ var PH2Component = {
 				_view_text_rel = 'facebox';
 			}
 		});
-		
+
 		//PUBLIC
 		return {
 			// takes an ID of an Occurrence stored in the database and shows it among its content
@@ -475,11 +484,14 @@ var PH2Component = {
 				for (var i = 0; i < selected_occurrence_ids.length; i++) {
 					_mark_as_lemmatized(selected_occurrence_ids[i], lemma);
 				}
+			},
+			hideGroup : function (selected_graph_id) {
+				return _hideGroup(selected_graph_id);
 			}
-			
+
 		}
 	},
-	
+
 	//Object
 	// ****************
 	// TypeBrowser
@@ -488,7 +500,7 @@ var PH2Component = {
 	/* Adds functionality to a TypeBrowser HTML skeleton.
 	** @param associatedDisplay: The PH2Component to receive all matching OccurrenceIDs when clicking on a type
 	*/
-		
+
 		//PRIVATE
 		//Object references
 		var _container = $('#' + HTMLObjectID);
@@ -507,7 +519,7 @@ var PH2Component = {
 		var _mode_selector_types = _container.find('#mode_selector_types');
 		var _mode_selector_lemmata = _container.find('#mode_selector_lemmata');
 		var _show_lemmatized_occurrences = true; //by default
-		
+
 		//Private methods
 		// disable search functions (status 0)
 		function _disable() {
@@ -517,7 +529,7 @@ var PH2Component = {
 			_result_box.html('').hide();
 			_select_all_box.hide();
 		}
-		
+
 		// enable search functions (status 1)
 		function _enable() {
 			_set_mode(_MODE);
@@ -526,7 +538,7 @@ var PH2Component = {
 				$('.mode_selector').fadeIn();
 			});
 		}
-		
+
 		function _set_mode ( mode ) {
 			// store the new mode
 			_MODE = mode;
@@ -544,7 +556,7 @@ var PH2Component = {
 			// reload the type selection
 			_load_type_selection();
 		}
-		
+
 		// load the type selection
 		function _load_type_selection () {
 			$(_type_selector).html('Include: ');
@@ -570,7 +582,7 @@ var PH2Component = {
 				$(_type_selector).append(html_string);
 			}
 		}
-		
+
 		// load counts for regex type results
 		function _load_counts () {
 			//stop running request
@@ -607,7 +619,7 @@ var PH2Component = {
 					error: function (error) {alert(JSON.stringify(error))}
 			});
 		}
-		
+
 		// get an array containing all selected types
 		function _get_selected_types () {
 			var types = [];
@@ -616,9 +628,9 @@ var PH2Component = {
 			});
 			return types;
 		}
-		
+
 		// search types by regex
-		function _searchTypes (query) {			
+		function _searchTypes (query) {
 			if (query == '') {
 				_result_box.html('');
 				_select_all_box.hide();
@@ -660,15 +672,15 @@ var PH2Component = {
 				_result_box.fadeIn();
 			}
 		}
-		
+
 		function _hide_lemmatized_results () {
 			_associatedDisplay.hideLemmatizedResults();
 		}
-		
+
 		function _show_lemmatized_results () {
 			_associatedDisplay.showLemmatizedResults();
 		}
-		
+
 		// bind loading of occurrences to specific link (= single search result)
 		/*function _bindActionToSearchResult (token_id) {
 			_container.find('a#token-' + token_id).bind( 'click', function() {
@@ -678,23 +690,23 @@ var PH2Component = {
 				_toggleCheckbox(token_id, false);
 			});
 		}*/
-		
+
 		$('input.type_selection').live('click', function() {
 			var token_id = $(this).attr('id').trim('token-');
 			_toggleCheckbox(token_id, false);
 		});
-		
+
 		$('input.type_selection').live('fire', function() {
 			// for external call of reversed click trigger
 			var token_id = $(this).attr('id').trim('token-');
 			_toggleCheckbox(token_id, true);
 		});
-		
+
 		$('a.matching_token').live( 'click', function() {
 			var token_id = $(this).attr('id').trim('token-');
 			_toggleCheckbox(token_id, true);
 		});
-		
+
 		$('#include_lemmatized_occ').live('click', function() {
 			if (_show_lemmatized_occurrences == true) {
 				_show_lemmatized_occurrences = false;
@@ -708,15 +720,15 @@ var PH2Component = {
 			});
 			_load_counts(); // refresh token counts
 		});
-		
+
 		_mode_selector_types.bind( 'click', function() {
 			_set_mode('TYPE');
 		});
-		
+
 		_mode_selector_lemmata.bind( 'click', function() {
 			_set_mode('LEMMA');
 		});
-		
+
 		// toggle checkbox event
 		function _toggleCheckbox (item_id, reversed) {
 			token_elem = _container.find('input#token-' + item_id);
@@ -738,7 +750,7 @@ var PH2Component = {
 				token_elem.prop("checked", true);
 			}
 		}
-		
+
 		// load occurrences into associatedDisplay (i.e. OccContextBox)
 		function _loadAssociatedOccurrences (item_id, clearExistingItems) {
 			var param;
@@ -762,7 +774,7 @@ var PH2Component = {
 					}
 			});
 		}
-		
+
 		// remove occurrences from associatedDisplay
 		function _removeAssociatedOccurrences (item_id) {
 			var param;
@@ -783,31 +795,31 @@ var PH2Component = {
 					}
 			});
 		}
-		
+
 		//Default routine / behaviour
 		// block submission of pseudo-form (form element)
 		_form.submit( function(e) {
 			e.preventDefault();
 		});
-		
+
 		// bind type search box to keypress events
 		/*
 		_search_field.bind( "keyup", function () {
 			delay( function() { _searchTypes(_search_field.val()); }, 500 );
 		});
 		*/
-		
+
 		// bind type search box to "ok"-button (search)
 		_search_button.bind( "click", function () {
 			_searchTypes(_search_field.val());
 		});
-		
+
 		// disable component at startup (enabled by ph2ontroller when ready)
 		_disable();
-		
+
 		// set mode to TYPE at startup
 		_MODE = 'TYPE';
-		
+
 		//PUBLIC
 		return {
 			set_status : function (status) {
@@ -819,7 +831,7 @@ var PH2Component = {
 					_enable();
 				}
 			},
-			
+
 			clear : function () {
 				// remove all TokenIDs
 				_selected_item_ids = new Array();
@@ -830,10 +842,10 @@ var PH2Component = {
 				_associatedDisplay.clear();
 			}
 		}
-		
+
 	},
-	
-	
+
+
 	// ****************
 	// GroupSelectorGraphvariants
 	// ****************
@@ -842,7 +854,7 @@ var PH2Component = {
 	** @param associatedDisplay: The PH2Component to receive all matching OccurrenceIDs when clicking on a group
 	** @param associatedDetailsWindow: The PH2Component to receive a fieldset-refference (#TODO) when clicking on a group (i.e. a window that shows the group details).
 	*/
-		
+
 		//PRIVATE
 		//Object references
 		var _container = $('#' + HTMLObjectID);
@@ -854,7 +866,7 @@ var PH2Component = {
 		var _delete_variant_tab_button = _container.find('#delete_variant_tab_button');
 		var _graph_id; // the graphgroup id this GroupSelector is assigned to. Loaded within the _init()-procedure
 		var _active_graphvariant_id; // the variant id that is currently active
-		
+
 		//Private methods
 		// load all groups assigned to the lemma
 		var _init = function () {
@@ -915,7 +927,7 @@ var PH2Component = {
 				}
 			});
 		}
-		
+
 		// event handler for onclick on group items
 		var _selectEvent = function (groupID) {
 			_active_graphvariant_id = groupID;
@@ -932,16 +944,16 @@ var PH2Component = {
 				_loadOccurrencesByGraphgroup(groupID);
 			}
 		}
-		
+
 		// loads all Occurrences assigned to the graph
 		var _loadAll = function () {
 			$.getJSON('actions/php/ajax.php?action=getOccurrenceIDsByGrapheme&graphID=' + _graph_id, function(occurrence_ids) {
 				_display.addMultiple(occurrence_ids);
 			});
 			_details_window.hide();
-			_delete_variant_tab_button.addClass('disabled');	
+			_delete_variant_tab_button.addClass('disabled');
 		}
-		
+
 		// loads all Occurrences that are assigned to Graphgroup @param graphgroupID
 		var _loadOccurrencesByGraphgroup = function (graphgroupID) {
 			$.getJSON('actions/php/ajax.php?action=getOccurrenceIDsByGraphgroup&graphgroupID=' + graphgroupID, function(occurrence_ids) {
@@ -955,7 +967,7 @@ var PH2Component = {
 			$('#active_variant_name').html(variant_name);
 			_delete_variant_form.find('#delete_button').val('Delete ' + variant_name);
 		}
-		
+
 		// assigns all occurrences selected in _display to Graphgroup @param newGraphgroupID
 		// current assignment is deleted
 		var _reassignOccurrences = function (newGraphgroupID) {
@@ -970,13 +982,13 @@ var PH2Component = {
 				}
 			});
 		}
-		
+
 		// binds a variant's html row to its select event
 		var _bindVariantToSelectEvent = function (graphgroupID) {
 			$('#group-' + graphgroupID + ' td.clickable').live( 'click', function() { _selectEvent(graphgroupID); } );
 			$('#assign-icon-' + graphgroupID).live( 'click', function() { _reassignOccurrences(graphgroupID); } );
 		}
-		
+
 		// adds a new variant to the database (add_variant_form)
 		var _addVariant = function (new_variant_number, new_variant_name) {
 			$.getJSON('actions/php/ajax.php?action=createGraphgroup&graphID=' + _graph_id + '&graphgroupNumber=' + new_variant_number + '&graphgroupVariantName=' + new_variant_name, function(data) {
@@ -990,7 +1002,7 @@ var PH2Component = {
 				}
 			});
 		}
-		
+
 		// deletes a variant (delete_variant_form)
 		var _deleteVariant = function (graphgroup_id) {
 			$.ajax({
@@ -1005,18 +1017,18 @@ var PH2Component = {
 				}
 			});
 		}
-		
+
 		// closes the add-variant tab
 		var _closeAddVariantTab = function () {
 			$('#add_variant_tab_button').trigger('click');
 			restoreForm('add_variant_form');
 		}
-		
+
 		// closes the delete-variant tab
 		var _closeDeleteVariantTab = function () {
 			$('#delete_variant_tab_button').trigger('click');
 		}
-		
+
 		//Default routine / behaviou
 		// ***
 		_init();
@@ -1051,25 +1063,25 @@ var PH2Component = {
 		_delete_variant_form.find('#cancel_delete_button').bind('click', function() {
 			_closeDeleteVariantTab();
 		});
-		
+
 		//PUBLIC
 		return {
-			
+
 			getActiveGraphID : function () {
 				return _graph_id;
 			},
-			
+
 			getActiveGraphgroupID : function () {
 				return _active_graphvariant_id;
 			},
-			
+
 			reload : function () {
 				_load(reload=true, _active_graphvariant_id);
 			}
 		}
-				
+
 	},
-	
+
 	//Object #INCOMPLETE
 	// ****************
 	// GroupSelector
@@ -1079,13 +1091,13 @@ var PH2Component = {
 	** @param associatedDisplay: The PH2Component to receive all matching OccurrenceIDs when clicking on a group
 	** @param associatedDetailsWindow: The PH2Component to receive a fieldset-refference (#TODO) when clicking on a group (i.e. a window that shows the group details).
 	*/
-		
+
 		//PRIVATE
 		//Object references
 		var _container = $('#' + HTMLObjectID);
 		var _tbody = _container.find('table#groups tbody');
 		var _lemma_id; // the lemma id this GroupSelector is assigned to. Loaded within the _init()-procedure
-		
+
 		//Private methods
 		// load all groups assigned to the lemma
 		var _init = function () {
@@ -1098,45 +1110,45 @@ var PH2Component = {
 				}
 			});
 		}
-		
+
 		// event handler for onclick on group items
 		var _selectEvent = function (groupID) {
-			
+
 		}
-		
+
 		// loads all Occurrences assigned to the lemma
 		var _loadAllOccurrences = function () {
-			
+
 		}
-		
+
 		// loads all Occurrences that are assigned to the lemma but not to a Morphology Group
 		var _loadUnassignedOccurrences = function () {
-			
+
 		}
-		
+
 		// loads all Occurrences that are assigned to Morphology Group @param MorphGroupID
 		var _loadOccurrencesByGroup = function (MorphGroupID) {
-			
+
 		}
-		
+
 		//Default routine / behaviour
 		// #TODO
 		_init();
-		
+
 		//PUBLIC
 		return {
-			
+
 		}
-				
+
 	},
-	
+
 	//Object #INCOMPLETE
 	// ****************
 	// LexRefBox
 	// ****************
 	LexRefBox : function(HTMLObjectID) {
 	/* Adds the possibility to add n reference fields to a lexical reference box */
-		
+
 		//PRIVATE
 		//Object references
 		var _container = $('#' + HTMLObjectID);
@@ -1144,7 +1156,7 @@ var PH2Component = {
 		var _ref_table = _container.find('table#references');
 		var _counter = 0;
 		var _new_ref_prototype = _ref_table.find('tbody tr:last-child').clone();
-		
+
 		//Private methods
 		/* Add a new reference field (i.e. table row) to the reference table
 		** Copies the last row of the current table and replaces relevant id-numbers (counting only)
@@ -1169,11 +1181,11 @@ var PH2Component = {
 			// bind delete icon
 			_bindDeleteIcon(new_ref_field.find('a.icon.delete'));
 		}
-		
+
 		var _increaseCounter = function () {
 			_counter += 1;
 		}
-		
+
 		var _bindDeleteIcon = function (objectReference) {
 			$(objectReference).click( function () {
 				var entry = $(this).parent().parent();
@@ -1192,7 +1204,7 @@ var PH2Component = {
 				entry.fadeOut('fast');
 			});
 		}
-		
+
 		//Default routine / behaviour
 		// bind delete buttons
 		_container.find('a.icon.delete').each( function() {
@@ -1202,16 +1214,16 @@ var PH2Component = {
 		_add_button.click( function() {
 			_addRefField();
 		});
-		
+
 	},
-	
+
 	//Object
 	// ****************
 	// DetailsWindow
 	// ****************
 	DetailsWindow : function(HTMLObjectID, loadFieldsFunction, saveFieldsFunction, isVisibleOnLoad) {
 	/* Adds load/save/restore functionality to a details window html skeleton, consisting of a form 1:n fields */
-		
+
 		//PRIVATE
 		// Object references
 		var _container = $('#' + HTMLObjectID);
@@ -1227,8 +1239,8 @@ var PH2Component = {
 		var _visible = isVisibleOnLoad;
 		var _activeIdentifier = null;
 		var _hasChanged = false;
-		
-		
+
+
 		//Private methods
 		/* Add a new reference field (i.e. table row) to the reference table
 		** Copies the last row of the current table and replaces relevant id-numbers (counting only)
@@ -1241,7 +1253,7 @@ var PH2Component = {
 			// restore button is disabled by default
 			_restoreButton.addClass('disabled');
 		}
-		
+
 		var _resetFields = function () {
 			// resets all fields to empty values
 			// #TODO: include non-input html objects
@@ -1249,7 +1261,7 @@ var PH2Component = {
 				$(this).val('');
 			});
 		}
-		
+
 		var _load = function () {
 			ajax_url = _loadFieldsFunction + _activeIdentifier;
 			// set all field values to ''
@@ -1266,7 +1278,7 @@ var PH2Component = {
 			});
 			_restoreButton.addClass('disabled');
 		}
-		
+
 		var _save = function () {
 			// before doing anything, validate the fields and abort if some values are incorrect
 			_validate_fields();
@@ -1292,18 +1304,18 @@ var PH2Component = {
 				}
             });
 		}
-		
+
 		var _validate_fields = function() {
 			validateFormFields(_form);
 		}
-		
+
 		//Default routine / behaviour
 		_init();
 		// bind save button to save function
 		_saveButton.bind('click', function(e) {
 			e.preventDefault();
 			_save();
-		});		
+		});
 		// bind change events of all form inputs to restore button (enabled/disabled)
 		_form.bind('change', function() {
 			_restoreButton.removeClass('disabled');
@@ -1315,24 +1327,24 @@ var PH2Component = {
 				_load();
 			}
 		});
-		
+
 		//PUBLIC
 		return {
-			
+
 			show : function() {
 				if (_visible == false) {
 					_container.fadeIn();
 					_visible = true;
 				}
 			},
-			
+
 			hide : function() {
 				if (_visible == true) {
 					_container.fadeOut();
 					_visible = false;
 				}
 			},
-			
+
 			load : function(identifier) {
 				/* The field contents of this component are loaded by calling an AJAX script (_loadFieldsFunction)
 				** with a given identifier (@param identifier), e.g., an ID of an entity to be loaded.
@@ -1343,12 +1355,12 @@ var PH2Component = {
 					_load();
 				}
 			},
-			
+
 			getHTMLObjectID : function() {
 				return _HTMLObjectID;
 			}
-			
+
 		}
 	}
-	
+
 }
